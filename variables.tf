@@ -43,7 +43,7 @@ variable "tags" {
 variable "firewall_sku_name" {
   type        = string
   description = "SKU of the Azure Firewall"
-  default     = "AZFW_Hub"
+  default     = "AZFW_VNet"
 }
 
 variable "firewall_sku_tier" {
