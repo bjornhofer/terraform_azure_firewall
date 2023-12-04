@@ -2,16 +2,14 @@ data "azurerm_resource_group" "rg" {
   name = var.firewall_resource_group_name
 }
 
-locals {
-  //base_name = ength(var.resource_group_name_suffix) > 0 ? "${var.resource_group_name_prefix}${var.resource_group_name_separator}${var.resource_group_base_name}${var.resource_group_name_separator}${var.resource_group_name_suffix}" : length(var.resource_group_name_prefix) > 0 ? "${var.resource_group_name_prefix}${var.resource_group_name_separator}${var.resource_group_base_name}" : var.resource_group_base_name
-  base_name_prefixed = length(var.firewall_base_name_prefix) > 0 ? "${var.firewall_base_name_prefix}${var.firewall_base_name_separator}${var.firewall_base_name}" : var.firewall_base_name
-  base_name_suffixed = length(var.firewall_base_name_suffix) > 0 ? "${var.firewall_base_name}${var.firewall_base_name_separator}${var.firewall_base_name_suffix}" : var.firewall_base_name
-
-  base_name = var.firewall_base_name_prefix == "" && var.firewall_base_name_suffix == "" ? var.firewall_base_name : length(var.firewall_base_name_suffix) > 0 && length(var.firewall_base_name_prefix) > 0 ? "${local.base_name_prefixed}${var.firewall_base_name_separator}${var.firewall_base_name}${var.firewall_base_name_separator}${var.firewall_base_name_suffix}" : length(var.firewall_base_name_prefix) > 0 ? local.base_name_prefixed : local.base_name_suffixed
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  suffix = [ "${var.firewall_name_suffix}" ]
+  prefix = [ "${var.firewall_name_prefix}" ]
 }
 
 resource "azurerm_public_ip" "firewall_public_ip" {
-  name                = "${local.base_name}-pip"
+  name                = module.naming.public_ip
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.firewall_location != "" ? var.firewall_location : data.azurerm_resource_group.rg.location
   sku                 = var.firewall_public_ip_sku
@@ -20,7 +18,7 @@ resource "azurerm_public_ip" "firewall_public_ip" {
 }
 
 resource "azurerm_firewall" "firewall" {
-  name                = local.base_name
+  name                = module.naming.firewall
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.firewall_location != "" ? var.firewall_location : data.azurerm_resource_group.rg.location
   sku_name            = var.firewall_sku_name
