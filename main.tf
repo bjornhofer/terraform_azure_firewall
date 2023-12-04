@@ -9,7 +9,7 @@ module "naming" {
 }
 
 resource "azurerm_public_ip" "firewall_public_ip" {
-  name                = module.naming.public_ip
+  name                = module.naming.public_ip.name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.firewall_location != "" ? var.firewall_location : data.azurerm_resource_group.rg.location
   sku                 = var.firewall_public_ip_sku
@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "firewall_public_ip" {
 }
 
 resource "azurerm_firewall" "firewall" {
-  name                = module.naming.firewall
+  name                = module.naming.firewall.name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.firewall_location != "" ? var.firewall_location : data.azurerm_resource_group.rg.location
   sku_name            = var.firewall_sku_name
