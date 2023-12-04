@@ -1,23 +1,12 @@
 // Base Information
-variable "firewall_base_name" {
-  description = "Base name for all resources"
-  type        = string
-}
-
-variable "firewall_base_name_suffix" {
+variable "firewall_name_suffix" {
   description = "Suffix to be applied to the firewall base name"
   type        = string
   default     = ""
 }
 
-variable "firewall_base_name_prefix" {
+variable "firewall_name_prefix" {
   description = "Prefix to be applied to the firewall base name"
-  type        = string
-  default     = ""
-}
-
-variable "firewall_base_name_separator" {
-  description = "Separator to be applied between the firewall base name prefix and suffix"
   type        = string
   default     = ""
 }
@@ -64,12 +53,6 @@ variable "firewall_subnet_id" {
 }
 
 // Public IP settings
-variable "firewall_public_ip_name" {
-  type        = string
-  description = "Name of the public IP address for the Azure Firewall"
-  default     = ""
-}
-
 variable "firewall_public_ip_sku" {
   type        = string
   description = "SKU of the public IP address for the Azure Firewall"
